@@ -1,0 +1,16 @@
+app/(chat)/api/chat/route.ts(73,17): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+app/(chat)/api/chat/route.ts(93,17): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type '(CoreAssistantMessage | CoreToolMessage)[]'.
+middleware.ts(14,38): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(args_0: GetServerSidePropsContext): Promise<Session | null>', gave the following error.
+    Argument of type 'NextRequest' is not assignable to parameter of type 'GetServerSidePropsContext'.
+      Type 'NextRequest' is missing the following properties from type 'GetServerSidePropsContext': req, res, query, resolvedUrl
+  Overload 2 of 4, '(args_0: (req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>): AppRouteHandlerFn', gave the following error.
+    Argument of type 'NextRequest' is not assignable to parameter of type '(req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>'.
+      Type 'NextRequest' provides no match for the signature '(req: NextAuthRequest, ctx: AppRouteHandlerFnContext): void | Response | Promise<void | Response>'.
+src/mastra/tools/index.ts(26,3): error TS2739: Type 'ZodObject<{ location: ZodString; }, "strip", ZodTypeAny, { location: string; }, { location: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/tools/index.ts(29,3): error TS2739: Type 'ZodObject<{ temperature: ZodNumber; feelsLike: ZodNumber; humidity: ZodNumber; windSpeed: ZodNumber; windGust: ZodNumber; conditions: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(59,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(120,3): error TS2739: Type 'ZodArray<ZodObject<{ date: ZodString; maxTemp: ZodNumber; minTemp: ZodNumber; precipitationChance: ZodNumber; condition: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>, "many">' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodObject<any, UnknownKeysParam, ZodTypeAny, { [x: string]: any; }, { [x: string]: any; }>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,18): error TS2589: Type instantiation is excessively deep and possibly infinite.

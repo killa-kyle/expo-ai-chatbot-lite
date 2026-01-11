@@ -1,0 +1,37 @@
+app/(chat)/api/chat/route.ts(9,10): error TS2305: Module '"@/lib/ai/models"' has no exported member 'myProvider'.
+app/(chat)/api/chat/route.ts(43,48): error TS2345: Argument of type 'Message[]' is not assignable to parameter of type 'CoreMessage[]'.
+  Type 'Message' is not assignable to type 'CoreMessage'.
+    Type 'Message' is not assignable to type 'CoreAssistantMessage | CoreSystemMessage | CoreUserMessage'.
+      Type 'Message' is not assignable to type 'CoreUserMessage'.
+        Types of property 'role' are incompatible.
+          Type '"user" | "data" | "system" | "assistant"' is not assignable to type '"user"'.
+            Type '"data"' is not assignable to type '"user"'.
+app/(chat)/api/chat/route.ts(57,16): error TS2741: Property 'id' is missing in type '{ createdAt: Date; chatId: string; role: "user"; content: UserContent; experimental_providerMetadata?: ProviderMetadata; }' but required in type '{ id: string; content: unknown; createdAt: Date; chatId: string; role: string; }'.
+app/(chat)/api/chat/route.ts(64,17): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+app/(chat)/api/chat/route.ts(75,9): error TS2353: Object literal may only specify known properties, and 'experimental_generateMessageId' does not exist in type 'CallSettings & Prompt & { model: LanguageModelV1; tools?: { getWeather: CoreTool<ZodObject<{ location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>, { ...; }> & { ...; }; requestSuggestions: CoreTool<...> & { ...; }; } | undefined; ... 13 more ...; _internal?: { ...; } | undefined; }'.
+app/(chat)/api/chat/route.ts(83,38): error TS2339: Property 'reasoning' does not exist on type 'Omit<StepResult<{ getWeather: CoreTool<ZodObject<{ location: ZodString; }, "strip", ZodTypeAny, { location: string; }, { location: string; }>, { temperature: number; ... 5 more ...; location: string; }> & { ...; }; requestSuggestions: CoreTool<...> & { ...; }; }>, "stepType" | "isContinued"> & { ...; }'.
+app/(chat)/api/chat/route.ts(87,17): error TS2353: Object literal may only specify known properties, and 'messages' does not exist in type '(CoreToolMessage | CoreAssistantMessage)[]'.
+app/(chat)/api/chat/route.ts(94,33): error TS2339: Property 'id' does not exist on type 'CoreToolMessage | CoreAssistantMessage'.
+  Property 'id' does not exist on type 'CoreToolMessage'.
+app/(chat)/api/chat/route.ts(113,46): error TS2554: Expected 1 arguments, but got 2.
+lib/ai/tools/get-weather.ts(86,5): error TS1117: An object literal cannot have multiple properties with the same name.
+lib/ai/tools/request-suggestions.ts(47,17): error TS18048: 'session.user' is possibly 'undefined'.
+lib/ai/tools/request-suggestions.ts(53,9): error TS2322: Type '{ id: string; documentId: string; documentCreatedAt: Date; userId: string; createdAt: Date; isResolved: boolean; originalText: string; suggestedText: string; description?: string | undefined; }[]' is not assignable to type '{ id: string; createdAt: Date; userId: string; documentId: string; documentCreatedAt: Date; originalText: string; suggestedText: string; description: string | null; isResolved: boolean; }[]'.
+  Type '{ id: string; documentId: string; documentCreatedAt: Date; userId: string; createdAt: Date; isResolved: boolean; originalText: string; suggestedText: string; description?: string | undefined; }' is not assignable to type '{ id: string; createdAt: Date; userId: string; documentId: string; documentCreatedAt: Date; originalText: string; suggestedText: string; description: string | null; isResolved: boolean; }'.
+    Types of property 'description' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string | null'.
+        Type 'undefined' is not assignable to type 'string | null'.
+middleware.ts(14,38): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(args_0: GetServerSidePropsContext): Promise<Session | null>', gave the following error.
+    Argument of type 'NextRequest' is not assignable to parameter of type 'GetServerSidePropsContext'.
+      Type 'NextRequest' is missing the following properties from type 'GetServerSidePropsContext': req, res, query, resolvedUrl
+  Overload 2 of 4, '(args_0: (req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>): AppRouteHandlerFn', gave the following error.
+    Argument of type 'NextRequest' is not assignable to parameter of type '(req: NextAuthRequest, ctx: AppRouteHandlerFnContext) => void | Response | Promise<void | Response>'.
+      Type 'NextRequest' provides no match for the signature '(req: NextAuthRequest, ctx: AppRouteHandlerFnContext): void | Response | Promise<void | Response>'.
+src/mastra/tools/index.ts(26,3): error TS2739: Type 'ZodObject<{ location: ZodString; }, "strip", ZodTypeAny, { location: string; }, { location: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/tools/index.ts(29,3): error TS2739: Type 'ZodObject<{ temperature: ZodNumber; feelsLike: ZodNumber; humidity: ZodNumber; windSpeed: ZodNumber; windGust: ZodNumber; conditions: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(59,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(120,3): error TS2739: Type 'ZodArray<ZodObject<{ date: ZodString; maxTemp: ZodNumber; minTemp: ZodNumber; precipitationChance: ZodNumber; condition: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>, "many">' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodObject<any, UnknownKeysParam, ZodTypeAny, { [x: string]: any; }, { [x: string]: any; }>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,18): error TS2589: Type instantiation is excessively deep and possibly infinite.

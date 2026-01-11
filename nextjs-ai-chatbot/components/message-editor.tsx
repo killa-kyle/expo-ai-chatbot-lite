@@ -1,6 +1,6 @@
 'use client';
 
-import { ChatRequestOptions, Message } from 'ai';
+import { ChatRequestOptions, UIMessage } from 'ai';
 import { Button } from './ui/button';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
@@ -9,10 +9,10 @@ import { toast } from 'sonner';
 import { useUserMessageId } from '@/hooks/use-user-message-id';
 
 export type MessageEditorProps = {
-  message: Message;
+  message: UIMessage;
   setMode: Dispatch<SetStateAction<'view' | 'edit'>>;
   setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[]),
+    messages: UIMessage[] | ((messages: UIMessage[]) => UIMessage[]),
   ) => void;
   reload: (
     chatRequestOptions?: ChatRequestOptions,
@@ -28,7 +28,7 @@ export function MessageEditor({
   const { userMessageIdFromServer } = useUserMessageId();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [draftContent, setDraftContent] = useState<string>(message.content);
+  const [draftContent, setDraftContent] = useState<string>((message as any).content);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {

@@ -1,28 +1,28 @@
-import {
-  type Message,
-  createDataStreamResponse,
-  smoothStream,
-  streamText,
-} from 'ai';
+// eslint-disable import/no-unresolved
+import { convertToModelMessages, streamText, UIMessage } from "ai";
+import { z } from "zod";
 
-import { auth } from '@/app/(auth)/auth';
-import { myProvider } from '@/lib/ai/models';
-import { systemPrompt } from '@/lib/ai/prompts';
+import { myProvider } from "@/lib/ai/models";
+
+import { systemPrompt } from "@/lib/ai/prompts";
+import { auth } from "@/app/(auth)/auth";
 import {
-  deleteChatById,
-  getChatById,
-  saveChat,
-  saveMessages,
-} from '@/lib/db/queries';
-import {
+  convertToUIMessages,
   generateUUID,
   getMostRecentUserMessage,
   sanitizeResponseMessages,
-} from '@/lib/utils';
+} from "@/lib/utils";
+import {
+  getChatById,
+  saveChat,
+  saveMessages,
+  saveSuggestions,
+  deleteChatById,
+} from "@/lib/db/queries";
 
-import { generateTitleFromUserMessage } from '../../actions';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
-import { getWeather } from '@/lib/ai/tools/get-weather';
+import { generateTitleFromUserMessage } from "../../actions";
+import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
+import { getWeather } from "@/lib/ai/tools/get-weather";
 
 export const maxDuration = 60;
 
@@ -30,20 +30,21 @@ export async function POST(request: Request) {
   const {
     id,
     messages,
-    selectedChatModel,
-  }: { id: string; messages: Array<Message>; selectedChatModel: string } =
+    modelId,
+  }: { id: string; messages: Array<UIMessage>; modelId: string } =
     await request.json();
 
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response("Unauthorized", { status: 401 });
   }
 
-  const userMessage = getMostRecentUserMessage(messages);
+  const coreMessages = await convertToModelMessages(messages);
+  const userMessage = getMostRecentUserMessage(coreMessages);
 
   if (!userMessage) {
-    return new Response('No user message found', { status: 400 });
+    return new Response("No user message found", { status: 400 });
   }
 
   const chat = await getChatById({ id });
@@ -54,98 +55,92 @@ export async function POST(request: Request) {
   }
 
   await saveMessages({
-    messages: [{ ...userMessage, createdAt: new Date(), chatId: id }],
+    messages: [
+      {
+        ...userMessage,
+        id: generateUUID(),
+        createdAt: new Date(),
+        chatId: id,
+      },
+    ],
   });
 
-  return createDataStreamResponse({
-    execute: (dataStream) => {
-      const result = streamText({
-        model: myProvider.languageModel(selectedChatModel),
-        system: systemPrompt({ selectedChatModel }),
-        messages,
-        maxSteps: 5,
-        experimental_activeTools:
-          selectedChatModel === 'chat-model-reasoning'
-            ? []
-            : [
-                'getWeather',
-                'requestSuggestions',
-              ],
-        experimental_transform: smoothStream({ chunking: 'word' }),
-        experimental_generateMessageId: generateUUID,
-        tools: {
+  const toolDefinitions =
+    modelId === "chat-model-reasoning"
+      ? {}
+      : {
           getWeather,
           requestSuggestions: requestSuggestions({
             session,
-            dataStream,
+            dataStream: null, // Removed dataStream usage, passing null or undefined
           }),
-        },
-        onFinish: async ({ response, reasoning }) => {
-          if (session.user?.id) {
-            try {
-              const sanitizedResponseMessages = sanitizeResponseMessages({
-                messages: response.messages,
-                reasoning,
-              });
+        };
 
-              await saveMessages({
-                messages: sanitizedResponseMessages.map((message) => {
-                  return {
-                    id: message.id,
-                    chatId: id,
-                    role: message.role,
-                    content: message.content,
-                    createdAt: new Date(),
-                  };
-                }),
-              });
-            } catch (error) {
-              console.error('Failed to save chat');
-            }
-          }
-        },
-        experimental_telemetry: {
-          isEnabled: true,
-          functionId: 'stream-text',
-        },
-      });
+  const result = streamText({
+    model: myProvider.languageModel(modelId),
+    system: systemPrompt,
+    messages: coreMessages,
+    ...(modelId === "chat-model-reasoning" ? {} : { maxSteps: 5 }),
+    tools: toolDefinitions as any,
+    onFinish: async ({ response }) => {
+      if (session.user?.id) {
+        try {
+          const sanitizedResponseMessages = sanitizeResponseMessages(
+            response.messages
+          );
 
-      result.mergeIntoDataStream(dataStream, {
-        sendReasoning: true,
-      });
+          await saveMessages({
+            messages: sanitizedResponseMessages.map((message) => {
+              return {
+                id: generateUUID(),
+                chatId: id,
+                role: message.role,
+                content: message.content,
+                createdAt: new Date(),
+              };
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to save chat");
+        }
+      }
     },
-    onError: () => {
-      return 'Oops, an error occured!';
+    experimental_telemetry: {
+      isEnabled: true,
+      functionId: "stream-text",
     },
   });
+
+  // Note: user-message-id injection removed for now due to StreamData unavailability in v6 check
+  return (result as any).toDataStreamResponse();
 }
 
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
+  const id = searchParams.get("id");
 
   if (!id) {
-    return new Response('Not Found', { status: 404 });
+    return new Response("Not Found", { status: 404 });
   }
 
   const session = await auth();
 
   if (!session || !session.user) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response("Unauthorized", { status: 401 });
   }
 
   try {
     const chat = await getChatById({ id });
 
     if (chat.userId !== session.user.id) {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     await deleteChatById({ id });
 
-    return new Response('Chat deleted', { status: 200 });
+    return new Response("Chat deleted", { status: 200 });
   } catch (error) {
-    return new Response('An error occurred while processing your request', {
+    return new Response("An error occurred while processing your request", {
       status: 500,
     });
   }

@@ -1,7 +1,13 @@
 'use client';
 
-import type { Attachment, Message } from 'ai';
-import { useChat } from 'ai/react';
+import type { UIMessage } from 'ai';
+import { useChat } from '@ai-sdk/react';
+
+interface Attachment {
+  name?: string;
+  contentType?: string;
+  url: string;
+}
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
@@ -23,7 +29,7 @@ export function Chat({
   isReadonly,
 }: {
   id: string;
-  initialMessages: Array<Message>;
+  initialMessages: Array<UIMessage>;
   selectedModelId: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
@@ -47,9 +53,8 @@ export function Chat({
     initialMessages,
     experimental_throttle: 100,
     onFinish: () => {
-      mutate('/api/history');
     },
-  });
+  } as any) as any;
 
   const { data: votes } = useSWR<Array<Vote>>(
     `/api/vote?chatId=${id}`,

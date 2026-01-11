@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import { Suspense } from 'react';
+
 
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -64,7 +66,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          {children}
+          <Suspense fallback={null}>{children}</Suspense>
         </ThemeProvider>
       </body>
     </html>

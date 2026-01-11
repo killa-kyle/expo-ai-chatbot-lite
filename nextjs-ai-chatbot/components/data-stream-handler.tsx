@@ -1,6 +1,6 @@
 'use client';
 
-import { useChat } from 'ai/react';
+import { useChat } from '@ai-sdk/react';
 import { useEffect, useRef, useState } from 'react';
 import { BlockKind } from './block';
 import { Suggestion } from '@/lib/db/schema';
@@ -10,21 +10,21 @@ import { useSWRConfig } from 'swr';
 
 type DataStreamDelta = {
   type:
-    | 'text-delta'
-    | 'code-delta'
-    | 'image-delta'
-    | 'title'
-    | 'id'
-    | 'suggestion'
-    | 'clear'
-    | 'finish'
-    | 'user-message-id'
-    | 'kind';
+  | 'text-delta'
+  | 'code-delta'
+  | 'image-delta'
+  | 'title'
+  | 'id'
+  | 'suggestion'
+  | 'clear'
+  | 'finish'
+  | 'user-message-id'
+  | 'kind';
   content: string | Suggestion;
 };
 
 export function DataStreamHandler({ id }: { id: string }) {
-  const { data: dataStream } = useChat({ id });
+  const { data: dataStream } = useChat({ id } as any) as any;
   const { setUserMessageIdFromServer } = useUserMessageId();
   const { setBlock } = useBlock();
   const lastProcessedIndex = useRef(-1);
@@ -87,8 +87,8 @@ export function DataStreamHandler({ id }: { id: string }) {
               content: draftBlock.content + (delta.content as string),
               isVisible:
                 draftBlock.status === 'streaming' &&
-                draftBlock.content.length > 400 &&
-                draftBlock.content.length < 450
+                  draftBlock.content.length > 400 &&
+                  draftBlock.content.length < 450
                   ? true
                   : draftBlock.isVisible,
               status: 'streaming',
@@ -100,8 +100,8 @@ export function DataStreamHandler({ id }: { id: string }) {
               content: delta.content as string,
               isVisible:
                 draftBlock.status === 'streaming' &&
-                draftBlock.content.length > 300 &&
-                draftBlock.content.length < 310
+                  draftBlock.content.length > 300 &&
+                  draftBlock.content.length < 310
                   ? true
                   : draftBlock.isVisible,
               status: 'streaming',

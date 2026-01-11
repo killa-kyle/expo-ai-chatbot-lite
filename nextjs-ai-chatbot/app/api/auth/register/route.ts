@@ -28,22 +28,24 @@ export async function POST(req: Request) {
     const [newUser] = await getUser(validatedData.email);
 
     // Generate a simple token for React Native
-    const token = Buffer.from(`${newUser.id}:${Date.now()}`).toString('base64');
+    const token = Buffer.from(`${newUser.id}:${Date.now()}`).toString("base64");
 
-    return NextResponse.json({ 
-      token,
-      user: {
-        id: newUser.id,
-        email: newUser.email
-      }
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        token,
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Registration error:", error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Validation failed", details: error.errors },
+        { error: "Validation failed", details: error.issues },
         { status: 400 }
       );
     }
@@ -53,4 +55,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-} 
+}

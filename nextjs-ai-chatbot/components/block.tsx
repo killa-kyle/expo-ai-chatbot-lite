@@ -1,9 +1,13 @@
 import type {
-  Attachment,
   ChatRequestOptions,
-  CreateMessage,
-  Message,
+  UIMessage,
 } from 'ai';
+
+interface Attachment {
+  name?: string;
+  contentType?: string;
+  url: string;
+}
 import { formatDistance } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -87,11 +91,11 @@ function PureBlock({
   stop: () => void;
   attachments: Array<Attachment>;
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
-  messages: Array<Message>;
-  setMessages: Dispatch<SetStateAction<Array<Message>>>;
+  messages: Array<UIMessage>;
+  setMessages: Dispatch<SetStateAction<Array<UIMessage>>>;
   votes: Array<Vote> | undefined;
   append: (
-    message: Message | CreateMessage,
+    message: UIMessage | any,
     chatRequestOptions?: ChatRequestOptions,
   ) => Promise<string | null | undefined>;
   handleSubmit: (
@@ -362,56 +366,56 @@ function PureBlock({
             initial={
               isMobile
                 ? {
-                    opacity: 1,
-                    x: block.boundingBox.left,
-                    y: block.boundingBox.top,
-                    height: block.boundingBox.height,
-                    width: block.boundingBox.width,
-                    borderRadius: 50,
-                  }
+                  opacity: 1,
+                  x: block.boundingBox.left,
+                  y: block.boundingBox.top,
+                  height: block.boundingBox.height,
+                  width: block.boundingBox.width,
+                  borderRadius: 50,
+                }
                 : {
-                    opacity: 1,
-                    x: block.boundingBox.left,
-                    y: block.boundingBox.top,
-                    height: block.boundingBox.height,
-                    width: block.boundingBox.width,
-                    borderRadius: 50,
-                  }
+                  opacity: 1,
+                  x: block.boundingBox.left,
+                  y: block.boundingBox.top,
+                  height: block.boundingBox.height,
+                  width: block.boundingBox.width,
+                  borderRadius: 50,
+                }
             }
             animate={
               isMobile
                 ? {
-                    opacity: 1,
-                    x: 0,
-                    y: 0,
-                    height: windowHeight,
-                    width: windowWidth ? windowWidth : 'calc(100dvw)',
-                    borderRadius: 0,
-                    transition: {
-                      delay: 0,
-                      type: 'spring',
-                      stiffness: 200,
-                      damping: 30,
-                      duration: 5000,
-                    },
-                  }
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  height: windowHeight,
+                  width: windowWidth ? windowWidth : 'calc(100dvw)',
+                  borderRadius: 0,
+                  transition: {
+                    delay: 0,
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 30,
+                    duration: 5000,
+                  },
+                }
                 : {
-                    opacity: 1,
-                    x: 400,
-                    y: 0,
-                    height: windowHeight,
-                    width: windowWidth
-                      ? windowWidth - 400
-                      : 'calc(100dvw-400px)',
-                    borderRadius: 0,
-                    transition: {
-                      delay: 0,
-                      type: 'spring',
-                      stiffness: 200,
-                      damping: 30,
-                      duration: 5000,
-                    },
-                  }
+                  opacity: 1,
+                  x: 400,
+                  y: 0,
+                  height: windowHeight,
+                  width: windowWidth
+                    ? windowWidth - 400
+                    : 'calc(100dvw-400px)',
+                  borderRadius: 0,
+                  transition: {
+                    delay: 0,
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 30,
+                    duration: 5000,
+                  },
+                }
             }
             exit={{
               opacity: 0,

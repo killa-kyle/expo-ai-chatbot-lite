@@ -8,6 +8,7 @@ import { getChatById, getMessagesByChatId } from '@/lib/db/queries';
 import { convertToUIMessages } from '@/lib/utils';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 
+
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const { id } = params;
@@ -43,7 +44,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <>
       <Chat
         id={chat.id}
-        initialMessages={convertToUIMessages(messagesFromDb)}
+        initialMessages={convertToUIMessages(messagesFromDb as any)}
         selectedModelId={selectedModelId}
         selectedVisibilityType={chat.visibility}
         isReadonly={session?.user?.id !== chat.userId}

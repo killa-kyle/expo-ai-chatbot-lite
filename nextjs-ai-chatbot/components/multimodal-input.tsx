@@ -1,11 +1,14 @@
 'use client';
 
 import type {
-  Attachment,
   ChatRequestOptions,
-  CreateMessage,
-  Message,
+  UIMessage,
 } from 'ai';
+interface Attachment {
+  name?: string;
+  contentType?: string;
+  url: string;
+}
 import cx from 'classnames';
 import type React from 'react';
 import {
@@ -51,17 +54,17 @@ function PureMultimodalInput({
   stop: () => void;
   attachments: Array<Attachment>;
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
-  messages: Array<Message>;
-  setMessages: Dispatch<SetStateAction<Array<Message>>>;
+  messages: Array<UIMessage>;
+  setMessages: Dispatch<SetStateAction<Array<UIMessage>>>;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
   handleSubmit: (
     event?: {
       preventDefault?: () => void;
     },
-    chatRequestOptions?: ChatRequestOptions,
+    chatRequestOptions?: any,
   ) => void;
   className?: string;
 }) {
@@ -121,8 +124,8 @@ function PureMultimodalInput({
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
     handleSubmit(undefined, {
-      experimental_attachments: attachments,
-    });
+      attachments: attachments,
+    } as any);
 
     setAttachments([]);
     setLocalStorageInput('');
@@ -313,7 +316,7 @@ function PureStopButton({
   setMessages,
 }: {
   stop: () => void;
-  setMessages: Dispatch<SetStateAction<Array<Message>>>;
+  setMessages: Dispatch<SetStateAction<Array<UIMessage>>>;
 }) {
   return (
     <Button

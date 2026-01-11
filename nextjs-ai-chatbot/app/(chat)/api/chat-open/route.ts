@@ -1,56 +1,51 @@
+import { convertToModelMessages, streamText, UIMessage } from "ai";
+import { z } from "zod";
+
+import { myProvider, models } from "@/lib/ai/models";
+import { systemPrompt } from "@/lib/ai/prompts";
 import {
-	type Message,
-	convertToCoreMessages,
-	createDataStreamResponse,
-	streamText,
-} from 'ai';
-import { customModel } from '@/lib/ai';
-import { models } from '@/lib/ai/models';
-import { systemPrompt } from '@/lib/ai/prompts';
-import { generateUUID } from '@/lib/utils';
+  convertToUIMessages,
+  generateUUID,
+  getMostRecentUserMessage,
+} from "@/lib/utils";
+
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
-	try {
-		console.log(">> Request received");
-		const { messages, modelId = 'gpt-4' } = await request.json();
-		console.log(">> Messages:", messages);
+  try {
+    const {
+      id,
+      messages,
+      modelId,
+    }: { id: string; messages: Array<UIMessage>; modelId: string } =
+      await request.json();
+    console.log(">> Messages:", messages);
 
-		const model = models.find((m) => m.id === modelId) || models[0];
-		const coreMessages = convertToCoreMessages(messages);
-		const userMessageId = generateUUID();
+    const model = models.find((m) => m.id === modelId) || models[0];
+    const coreMessages = await convertToModelMessages(messages);
+    const userMessageId = generateUUID();
 
-		return createDataStreamResponse({
-			execute: (dataStream) => {
-				dataStream.writeData({
-					type: 'user-message-id',
-					content: userMessageId,
-				});
+    const result = streamText({
+      model: myProvider.languageModel(model.apiIdentifier),
+      system: systemPrompt,
+      messages: coreMessages,
+    });
 
-				const result = streamText({
-					model: customModel(model.apiIdentifier),
-					system: systemPrompt,
-					messages: coreMessages,
-					maxSteps: 5,
-				});
-
-				result.mergeIntoDataStream(dataStream);
-			},
-		});
-
-	} catch (error) {
-		console.error("API Error:", error);
-		return new Response(
-			JSON.stringify({ error: "Failed to generate response" }),
-			{ 
-				status: 500,
-				headers: {
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-	}
+    return result.toTextStreamResponse();
+  } catch (error) {
+    console.error("API Error:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to generate response" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 }
 
 export async function GET() {
-	return new Response('Ready', { status: 200 });
+  return new Response("Ready", { status: 200 });
 }

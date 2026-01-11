@@ -1,0 +1,70 @@
+app/(chat)/actions.ts(3,15): error TS2305: Module '"ai"' has no exported member 'CoreUserMessage'.
+app/(chat)/api/chat-open/route.ts(2,7): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+app/(chat)/api/chat-open/route.ts(3,2): error TS2724: '"ai"' has no exported member named 'convertToCoreMessages'. Did you mean 'convertToModelMessages'?
+app/(chat)/api/chat-open/route.ts(4,2): error TS2724: '"ai"' has no exported member named 'createDataStreamResponse'. Did you mean 'createTextStreamResponse'?
+app/(chat)/api/chat-open/route.ts(23,14): error TS7006: Parameter 'dataStream' implicitly has an 'any' type.
+app/(chat)/api/chat-open/route.ts(33,6): error TS2353: Object literal may only specify known properties, and 'maxSteps' does not exist in type 'CallSettings & (Prompt & { model: LanguageModel; tools?: ToolSet | undefined; toolChoice?: ToolChoice<ToolSet> | undefined; ... 18 more ...; _internal?: { ...; } | undefined; })'.
+app/(chat)/api/chat-open/route.ts(36,12): error TS2339: Property 'mergeIntoDataStream' does not exist on type 'StreamTextResult<ToolSet, Output<string, string, never>>'.
+app/(chat)/api/chat/route.ts(2,8): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+app/(chat)/api/chat/route.ts(3,3): error TS2724: '"ai"' has no exported member named 'convertToCoreMessages'. Did you mean 'convertToModelMessages'?
+app/(chat)/api/chat/route.ts(4,3): error TS2724: '"ai"' has no exported member named 'createDataStreamResponse'. Did you mean 'createTextStreamResponse'?
+app/(chat)/api/chat/route.ts(70,15): error TS7006: Parameter 'dataStream' implicitly has an 'any' type.
+app/(chat)/api/chat/route.ts(72,9): error TS2322: Type 'LanguageModelV1' is not assignable to type 'LanguageModel'.
+  Type 'LanguageModelV1' is not assignable to type '(string & {}) | LanguageModelV3 | LanguageModelV2'.
+    Property 'supportedUrls' is missing in type 'LanguageModelV1' but required in type 'LanguageModelV2'.
+app/(chat)/api/chat/route.ts(73,17): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+app/(chat)/api/chat/route.ts(118,14): error TS2339: Property 'mergeIntoDataStream' does not exist on type 'StreamTextResult<{ getWeather: Tool<unknown, unknown>; requestSuggestions: Tool<unknown, unknown>; }, Output<string, string, never>>'.
+app/mastra/page.tsx(3,25): error TS2307: Cannot find module 'ai/react' or its corresponding type declarations.
+app/mastra/page.tsx(12,21): error TS7006: Parameter 'm' implicitly has an 'any' type.
+components/block-messages.tsx(4,30): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/block.tsx(2,3): error TS2305: Module '"ai"' has no exported member 'Attachment'.
+components/block.tsx(4,3): error TS2724: '"ai"' has no exported member named 'CreateMessage'. Did you mean 'CreateUIMessage'?
+components/block.tsx(5,3): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/chat.tsx(3,15): error TS2305: Module '"ai"' has no exported member 'Attachment'.
+components/chat.tsx(3,27): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/chat.tsx(4,25): error TS2307: Cannot find module 'ai/react' or its corresponding type declarations.
+components/data-stream-handler.tsx(3,25): error TS2307: Cannot find module 'ai/react' or its corresponding type declarations.
+components/message-actions.tsx(1,15): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/message-editor.tsx(3,30): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/message.tsx(3,35): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/message.tsx(74,56): error TS7006: Parameter 'attachment' implicitly has an 'any' type.
+components/message.tsx(129,47): error TS7006: Parameter 'toolInvocation' implicitly has an 'any' type.
+components/messages.tsx(1,30): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/multimodal-input.tsx(4,3): error TS2305: Module '"ai"' has no exported member 'Attachment'.
+components/multimodal-input.tsx(6,3): error TS2724: '"ai"' has no exported member named 'CreateMessage'. Did you mean 'CreateUIMessage'?
+components/multimodal-input.tsx(7,3): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/multimodal-input.tsx(124,7): error TS2353: Object literal may only specify known properties, and 'experimental_attachments' does not exist in type 'ChatRequestOptions'.
+components/preview-attachment.tsx(1,15): error TS2305: Module '"ai"' has no exported member 'Attachment'.
+components/suggested-actions.tsx(5,30): error TS2724: '"ai"' has no exported member named 'CreateMessage'. Did you mean 'CreateUIMessage'?
+components/suggested-actions.tsx(5,45): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+components/toolbar.tsx(3,35): error TS2724: '"ai"' has no exported member named 'CreateMessage'. Did you mean 'CreateUIMessage'?
+components/toolbar.tsx(3,50): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+lib/ai/custom-middleware.ts(1,15): error TS2724: '"ai"' has no exported member named 'LanguageModelV1Middleware'. Did you mean 'LanguageModelMiddleware'?
+lib/ai/index.ts(8,5): error TS2741: Property 'supportedUrls' is missing in type 'LanguageModelV1' but required in type 'LanguageModelV3'.
+lib/ai/tools/get-weather.ts(29,3): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '({ location }: { location: any; }) => Promise<{ temperature: number; feelsLike: number; humidity: number; windSpeed: number; windGust: number; conditions: string; location: string; }>' is not assignable to type 'undefined'.
+lib/ai/tools/get-weather.ts(29,21): error TS7031: Binding element 'location' implicitly has an 'any' type.
+lib/ai/tools/request-suggestions.ts(30,5): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '({ documentId, suggestions }: { documentId: any; suggestions: any; }) => Promise<{ id: any; title: string; kind: "text" | "code" | "image"; message: string; }>' is not assignable to type 'undefined'.
+lib/ai/tools/request-suggestions.ts(30,23): error TS7031: Binding element 'documentId' implicitly has an 'any' type.
+lib/ai/tools/request-suggestions.ts(30,35): error TS7031: Binding element 'suggestions' implicitly has an 'any' type.
+lib/ai/tools/request-suggestions.ts(42,51): error TS7006: Parameter 'suggestion' implicitly has an 'any' type.
+lib/utils.ts(2,3): error TS2305: Module '"ai"' has no exported member 'CoreAssistantMessage'.
+lib/utils.ts(3,3): error TS2305: Module '"ai"' has no exported member 'CoreMessage'.
+lib/utils.ts(4,3): error TS2305: Module '"ai"' has no exported member 'CoreToolMessage'.
+lib/utils.ts(5,3): error TS2724: '"ai"' has no exported member named 'Message'. Did you mean 'UIMessage'?
+lib/utils.ts(6,3): error TS2724: '"ai"' has no exported member named 'ToolInvocation'. Did you mean 'UIToolInvocation'?
+lib/utils.ts(65,55): error TS7006: Parameter 'toolInvocation' implicitly has an 'any' type.
+lib/utils.ts(67,14): error TS7006: Parameter 'tool' implicitly has an 'any' type.
+lib/utils.ts(149,54): error TS7006: Parameter 'content' implicitly has an 'any' type.
+lib/utils.ts(183,8): error TS7006: Parameter 'toolInvocation' implicitly has an 'any' type.
+lib/utils.ts(222,3): error TS2578: Unused '@ts-expect-error' directive.
+src/mastra/tools/index.ts(26,3): error TS2739: Type 'ZodObject<{ location: ZodString; }, "strip", ZodTypeAny, { location: string; }, { location: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/tools/index.ts(29,3): error TS2739: Type 'ZodObject<{ temperature: ZodNumber; feelsLike: ZodNumber; humidity: ZodNumber; windSpeed: ZodNumber; windGust: ZodNumber; conditions: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(59,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(120,3): error TS2739: Type 'ZodArray<ZodObject<{ date: ZodString; maxTemp: ZodNumber; minTemp: ZodNumber; precipitationChance: ZodNumber; condition: ZodString; location: ZodString; }, "strip", ZodTypeAny, { ...; }, { ...; }>, "many">' is missing the following properties from type 'ZodType<any, ZodTypeDef, any>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,3): error TS2739: Type 'ZodObject<{ city: ZodString; }, "strip", ZodTypeAny, { city: string; }, { city: string; }>' is missing the following properties from type 'ZodObject<any, UnknownKeysParam, ZodTypeAny, { [x: string]: any; }, { [x: string]: any; }>': "~standard", "~validate"
+src/mastra/workflows/index.ts(177,18): error TS2589: Type instantiation is excessively deep and possibly infinite.

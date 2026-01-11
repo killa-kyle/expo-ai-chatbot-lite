@@ -1,6 +1,6 @@
 'use client';
 
-import type { ChatRequestOptions, CreateMessage, Message } from 'ai';
+import type { UIMessage } from 'ai';
 import cx from 'classnames';
 import {
   AnimatePresence,
@@ -40,12 +40,12 @@ import { BlockKind } from './block';
 
 type ToolProps = {
   type:
-    | 'final-polish'
-    | 'request-suggestions'
-    | 'adjust-reading-level'
-    | 'code-review'
-    | 'add-comments'
-    | 'add-logs';
+  | 'final-polish'
+  | 'request-suggestions'
+  | 'adjust-reading-level'
+  | 'code-review'
+  | 'add-comments'
+  | 'add-logs';
   description: string;
   icon: JSX.Element;
   selectedTool: string | null;
@@ -54,8 +54,8 @@ type ToolProps = {
   setIsToolbarVisible?: Dispatch<SetStateAction<boolean>>;
   isAnimating: boolean;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
 };
 
@@ -182,8 +182,8 @@ const ReadingLevelSelector = ({
   setSelectedTool: Dispatch<SetStateAction<string | null>>;
   isAnimating: boolean;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
 }) => {
   const LEVELS = [
@@ -287,12 +287,12 @@ const toolsByBlockKind: Record<
   BlockKind,
   Array<{
     type:
-      | 'final-polish'
-      | 'request-suggestions'
-      | 'adjust-reading-level'
-      | 'code-review'
-      | 'add-comments'
-      | 'add-logs';
+    | 'final-polish'
+    | 'request-suggestions'
+    | 'adjust-reading-level'
+    | 'code-review'
+    | 'add-comments'
+    | 'add-logs';
     description: string;
     icon: JSX.Element;
   }>
@@ -342,8 +342,8 @@ export const Tools = ({
   selectedTool: string | null;
   setSelectedTool: Dispatch<SetStateAction<string | null>>;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
   isAnimating: boolean;
   setIsToolbarVisible: Dispatch<SetStateAction<boolean>>;
@@ -402,11 +402,11 @@ const PureToolbar = ({
   setIsToolbarVisible: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
   stop: () => void;
-  setMessages: Dispatch<SetStateAction<Message[]>>;
+  setMessages: Dispatch<SetStateAction<UIMessage[]>>;
   blockKind: BlockKind;
 }) => {
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -464,19 +464,19 @@ const PureToolbar = ({
           isToolbarVisible
             ? selectedTool === 'adjust-reading-level'
               ? {
-                  opacity: 1,
-                  y: 0,
-                  height: 6 * 43,
-                  transition: { delay: 0 },
-                  scale: 0.95,
-                }
+                opacity: 1,
+                y: 0,
+                height: 6 * 43,
+                transition: { delay: 0 },
+                scale: 0.95,
+              }
               : {
-                  opacity: 1,
-                  y: 0,
-                  height: toolsByBlockKind[blockKind].length * 50,
-                  transition: { delay: 0 },
-                  scale: 1,
-                }
+                opacity: 1,
+                y: 0,
+                height: toolsByBlockKind[blockKind].length * 50,
+                transition: { delay: 0 },
+                scale: 1,
+              }
             : { opacity: 1, y: 0, height: 54, transition: { delay: 0 } }
         }
         exit={{ opacity: 0, y: -20, transition: { duration: 0.1 } }}

@@ -2,14 +2,14 @@
 
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { ChatRequestOptions, CreateMessage, Message } from 'ai';
+import { UIMessage } from 'ai';
 import { memo } from 'react';
 
 interface SuggestedActionsProps {
   chatId: string;
   append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions,
+    message: UIMessage | any,
+    chatRequestOptions?: any,
   ) => Promise<string | null | undefined>;
 }
 

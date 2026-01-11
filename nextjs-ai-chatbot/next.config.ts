@@ -1,14 +1,14 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@mastra/*"],
-  experimental: {
-    ppr: true,
-  },
+
+  cacheComponents: true,
+
   images: {
     remotePatterns: [
       {
-        hostname: 'avatar.vercel.sh',
+        hostname: "avatar.vercel.sh",
       },
     ],
   },
