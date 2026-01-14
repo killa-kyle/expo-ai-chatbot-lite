@@ -29,11 +29,11 @@ export function Player({ left, right }: { left: boolean; right: boolean }) {
                     <boxGeometry args={[0.4, 0.8, 0.4]} />
                     <meshStandardMaterial color="#2d3436" />
                 </mesh>
-                <mesh position={[0.12, -0.4, 0]}>
+                <mesh position={[0.12, -0.4, 0]} castShadow>
                     <boxGeometry args={[0.06, 0.04, 1.4]} />
                     <meshStandardMaterial color="#636e72" />
                 </mesh>
-                <mesh position={[-0.12, -0.4, 0]}>
+                <mesh position={[-0.12, -0.4, 0]} castShadow>
                     <boxGeometry args={[0.06, 0.04, 1.4]} />
                     <meshStandardMaterial color="#636e72" />
                 </mesh>

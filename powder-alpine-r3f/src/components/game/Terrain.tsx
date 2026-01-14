@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo, useState, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -12,10 +12,19 @@ export const gameState = {
 };
 
 const CHUNK_SIZE = 250;
-const TREE_COUNT = 35;
+const TREE_COUNT = 45;
+
+// Reusable geometries and materials to save memory and prevent flickering
+const trunkGeo = new THREE.CylinderGeometry(0.08, 0.12, 1);
+const needlesGeo = new THREE.ConeGeometry(0.5, 1.4, 8);
+const trunkMat = new THREE.MeshStandardMaterial({ color: '#4d392b' });
+const needlesMat = new THREE.MeshStandardMaterial({ color: '#2d4a22' });
 
 function Chunk({ zOffset }: { zOffset: number }) {
-    const trees = useMemo(() => {
+    const trunkRef = useRef<THREE.InstancedMesh>(null);
+    const needlesRef = useRef<THREE.InstancedMesh>(null);
+
+    const treePositions = useMemo(() => {
         const temp = [];
         const seed = zOffset;
         const random = (s: number) => {
@@ -26,38 +35,43 @@ function Chunk({ zOffset }: { zOffset: number }) {
         for (let i = 0; i < TREE_COUNT; i++) {
             const tSeed = seed + i * 1.5;
             temp.push({
-                id: i,
-                x: (random(tSeed) - 0.5) * 70,
+                x: (random(tSeed) - 0.5) * 80,
                 z: random(tSeed + 0.5) * CHUNK_SIZE
             });
         }
         return temp;
     }, [zOffset]);
 
-    const groupRef = useRef<THREE.Group>(null);
+    useLayoutEffect(() => {
+        if (!trunkRef.current || !needlesRef.current) return;
 
-    // We move the chunk in the PARENT's frame to ensure all chunks move together
+        const dummy = new THREE.Object3D();
+        treePositions.forEach((tree, i) => {
+            // Trunk
+            dummy.position.set(tree.x, 0.5, tree.z);
+            dummy.updateMatrix();
+            trunkRef.current!.setMatrixAt(i, dummy.matrix);
+
+            // Needles
+            dummy.position.set(tree.x, 1.2, tree.z);
+            dummy.updateMatrix();
+            needlesRef.current!.setMatrixAt(i, dummy.matrix);
+        });
+
+        trunkRef.current.instanceMatrix.needsUpdate = true;
+        needlesRef.current.instanceMatrix.needsUpdate = true;
+    }, [treePositions]);
+
     return (
-        <group ref={groupRef} position={[0, 0, zOffset]}>
-            {/* Floor - Positioned at y=0 */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, CHUNK_SIZE / 2]} receiveShadow>
-                <planeGeometry args={[120, CHUNK_SIZE]} />
+        <group position={[0, 0, zOffset]}>
+            {/* Floor */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, CHUNK_SIZE / 2]} receiveShadow>
+                <planeGeometry args={[140, CHUNK_SIZE]} />
                 <meshStandardMaterial color="#f8fafc" />
             </mesh>
 
-            {/* Trees */}
-            {trees.map(tree => (
-                <group key={tree.id} position={[tree.x, 0, tree.z]}>
-                    <mesh position={[0, 0.5, 0]}>
-                        <cylinderGeometry args={[0.08, 0.12, 1]} />
-                        <meshStandardMaterial color="#4d392b" />
-                    </mesh>
-                    <mesh position={[0, 1.2, 0]}>
-                        <coneGeometry args={[0.5, 1.4, 8]} />
-                        <meshStandardMaterial color="#2d4a22" />
-                    </mesh>
-                </group>
-            ))}
+            <instancedMesh ref={trunkRef} args={[trunkGeo, trunkMat, TREE_COUNT]} castShadow receiveShadow />
+            <instancedMesh ref={needlesRef} args={[needlesGeo, needlesMat, TREE_COUNT]} castShadow receiveShadow />
         </group>
     );
 }
@@ -67,13 +81,12 @@ export function Terrain() {
     const [activeChunks, setActiveChunks] = useState([0, 1, 2, 3]);
 
     useFrame((state, delta) => {
-        // 1. UPDATE GLOBAL VELOCITY & POSITION (Single Truth)
-        const baseSpeed = 24;
-        const maxLateralSpeed = 22;
+        // 1. UPDATE GLOBAL VELOCITY & POSITION
+        const baseSpeed = 26;
+        const maxLateralSpeed = 24;
         const carvingEase = 10;
         const accelerationEase = 3;
 
-        // Direct access to state.sideInput (managed by parent)
         const targetSideSpeed = gameState.sideInput * maxLateralSpeed;
 
         gameState.velocityX = THREE.MathUtils.lerp(
@@ -93,7 +106,6 @@ export function Terrain() {
 
         // 2. MOVE THE ENTIRE WORLD CONTAINER
         if (containerRef.current) {
-            // Negative world position moves the world past the player
             containerRef.current.position.z = -gameState.worldZ;
             containerRef.current.position.x = -gameState.worldX;
         }
@@ -104,9 +116,9 @@ export function Terrain() {
             setActiveChunks([currentChunkIdx - 1, currentChunkIdx, currentChunkIdx + 1, currentChunkIdx + 2, currentChunkIdx + 3]);
         }
 
-        // 4. CAMERA SYNC (Static relative to Player at 0,0,0)
+        // 4. CAMERA SYNC
         state.camera.position.set(0, 24, -18);
-        state.camera.lookAt(0, 0, 10);
+        state.camera.lookAt(0, 0, 12);
     });
 
     return (
@@ -114,7 +126,6 @@ export function Terrain() {
             {activeChunks.map(idx => (
                 <Chunk key={idx} zOffset={idx * CHUNK_SIZE} />
             ))}
-            <gridHelper args={[120, 30, '#e2e8f0', '#e2e8f0']} position={[0, 0.01, gameState.worldZ + 500]} />
         </group>
     );
 }
